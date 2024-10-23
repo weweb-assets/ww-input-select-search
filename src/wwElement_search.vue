@@ -22,8 +22,8 @@ export default {
     },
     emits: ['update:content'],
     setup(props) {
-        const updateFilter = inject('_wwSelectUpdateFilter');
-        const { updateHasSearch, updateSearchElement } = inject('_wwSelectUseSearch');
+        const updateFilter = inject('_wwSelectUpdateFilter', () => {});
+        const { updateHasSearch, updateSearchElement } = inject('_wwSelectUseSearch', {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
 
