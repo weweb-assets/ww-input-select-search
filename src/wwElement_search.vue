@@ -12,6 +12,14 @@
 <script>
 import { inject, onBeforeUnmount, ref, computed, watch } from 'vue';
 
+function debounce(fn, delay) {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn(...args), delay);
+    };
+}
+
 export default {
     props: {
         content: { type: Object, required: true },
@@ -31,9 +39,14 @@ export default {
             if (updateSearchElement) updateSearchElement(value);
         });
 
+        const debouncedUpdateFilter = debounce((value, filterBy) => {
+            if (updateFilter) updateFilter({ value, filterBy });
+        }, 300);
+
         const handleInputChange = event => {
-            if (event.type === 'change' && updateFilter)
-                updateFilter({ value: event.value, filterBy: props.content.searchBy });
+            if (event.type === 'change') {
+                debouncedUpdateFilter(event.value, props.content.searchBy);
+            }
         };
 
         if (updateHasSearch) updateHasSearch(true);
