@@ -13,27 +13,24 @@ export default {
     properties: {
         searchBy: {
             label: 'Search by',
-            type: 'TextSelect',
-            options: {
-                options: [
-                    {
-                        value: 'value',
-                        label: 'Value',
-                    },
-                    {
-                        value: 'label',
-                        label: 'Label',
-                    },
-                ],
-            },
             bindable: true,
-            defaultValue: 'single',
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'A string value, either "value" or "label"',
+            type: 'Array',
+            options: (_, sidepanelContent) => {
+                return {
+                    item: {
+                        type: 'Object',
+                        options: {
+                            item: {
+                                filter: {
+                                    type: 'ObjectPropertyPath',
+                                    options: { object: sidepanelContent.optionProperties || {} },
+                                    defaultValue: '',
+                                },
+                            },
+                        },
+                    },
+                };
             },
-            /* wwEditor:end */
         },
         textInput: {
             hidden: true,
@@ -41,6 +38,10 @@ export default {
                 isWwObject: true,
                 type: '9c263ffe-7da7-45e7-832c-543aef56faef',
             },
+        },
+        optionProperties: {
+            hidden: true,
+            editorOnly: true,
         },
     },
 };

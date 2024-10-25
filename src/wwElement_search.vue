@@ -29,23 +29,41 @@ export default {
         wwElementState: { type: Object, required: true },
     },
     emits: ['update:content'],
-    setup(props) {
-        const updateFilter = inject('_wwSelectUpdateFilter', () => {});
+    setup(props, { emit }) {
+        const updateSearch = inject('_wwSelectUpdateSearch', () => {});
+        const optionProperties = inject('_wwSelectOptionProperties', ref({}));
         const { updateHasSearch, updateSearchElement } = inject('_wwSelectUseSearch', {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
+        const searchBy = computed(() => {
+            return (props.content.searchBy || [])
+                .filter(item => item && item.filter)
+                .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
+                .flat();
+        });
 
         watch(searchElement, value => {
             if (updateSearchElement) updateSearchElement(value);
         });
 
-        const debouncedUpdateFilter = debounce((value, filterBy) => {
-            if (updateFilter) updateFilter({ value, filterBy });
+        watch(
+            optionProperties,
+            value => {
+                emit('update:sidepanel-content', {
+                    path: 'optionProperties',
+                    value: value,
+                });
+            },
+            { immediate: true, deep: true }
+        );
+
+        const debouncedUpdateSearch = debounce((value, searchBy) => {
+            if (updateSearch) updateSearch({ value, searchBy });
         }, 300);
 
         const handleInputChange = event => {
             if (event.type === 'change') {
-                debouncedUpdateFilter(event.value, props.content.searchBy);
+                debouncedUpdateSearch(event.value, searchBy);
             }
         };
 
