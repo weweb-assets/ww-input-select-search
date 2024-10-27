@@ -1,11 +1,12 @@
 <template>
-    <wwElement
-        class="ww-select-search"
-        ref="searchElementRef"
-        v-bind="content.textInput"
-        :name="wwElementState.name"
-        @element-event="handleInputChange"
-    />
+    <div class="ww-select-search">
+        <wwElement
+            ref="searchElementRef"
+            v-bind="content.textInput"
+            :name="wwElementState.name"
+            @element-event="handleInputChange"
+        />
+    </div>
 </template>
 
 <script>
@@ -21,9 +22,9 @@ export default {
     },
     emits: ['update:content'],
     setup(props, { emit }) {
+        const { debounce } = inject('_wwUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
         const { updateHasSearch, updateSearchElement, updateSearch } = inject('_wwSelectUseSearch', {});
-        const { debounce } = inject('_wwUtils', {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
         const searchBy = computed(() => {
@@ -32,32 +33,27 @@ export default {
                 .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
                 .flat();
         });
-
         const debouncedUpdateSearch = debounce((value, searchBy) => {
             if (updateSearch) updateSearch({ value, searchBy });
         }, 300);
-
         const handleInputChange = event => {
             if (event.type === 'change') {
                 if (debounce) debouncedUpdateSearch(event.value, searchBy);
             }
         };
-
         watch(searchElement, value => {
             if (updateSearchElement) updateSearchElement(value);
         });
-
         watch(
             optionProperties,
             value => {
                 emit('update:sidepanel-content', {
                     path: 'optionProperties',
-                    value: value,
+                    value,
                 });
             },
             { immediate: true, deep: true }
         );
-
         onMounted(() => {
             if (updateHasSearch) updateHasSearch(true);
             if (updateSearch) updateSearch({ value: '', searchBy });
@@ -65,7 +61,6 @@ export default {
         onBeforeUnmount(() => {
             if (updateHasSearch) updateHasSearch(false);
         });
-
         return {
             searchElementRef,
             handleInputChange,
