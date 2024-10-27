@@ -39,7 +39,7 @@ export default {
 
         const handleInputChange = event => {
             if (event.type === 'change') {
-                debouncedUpdateSearch(event.value, searchBy);
+                if (debounce) debouncedUpdateSearch(event.value, searchBy);
             }
         };
 
