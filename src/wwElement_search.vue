@@ -56,7 +56,7 @@ export default {
         );
         onMounted(() => {
             if (updateHasSearch) updateHasSearch(true);
-            if (updateSearch) updateSearch({ value: '', searchBy });
+            if (updateSearch) updateSearch({ value: '', searchBy, searchMatches: [] });
         });
         onBeforeUnmount(() => {
             if (updateHasSearch) updateHasSearch(false);
