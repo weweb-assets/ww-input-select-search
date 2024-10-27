@@ -1,24 +1,15 @@
 <template>
-    <div class="ww-select-search">
-        <wwElement
-            ref="searchElementRef"
-            v-bind="content.textInput"
-            :name="wwElementState.name"
-            @element-event="handleInputChange"
-        />
-    </div>
+    <wwElement
+        class="ww-select-search"
+        ref="searchElementRef"
+        v-bind="content.textInput"
+        :name="wwElementState.name"
+        @element-event="handleInputChange"
+    />
 </template>
 
 <script>
-import { inject, onBeforeUnmount, ref, computed, watch } from 'vue';
-
-function debounce(fn, delay) {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn(...args), delay);
-    };
-}
+import { inject, onMounted, onBeforeUnmount, ref, computed, watch } from 'vue';
 
 export default {
     props: {
@@ -30,9 +21,9 @@ export default {
     },
     emits: ['update:content'],
     setup(props, { emit }) {
-        const updateSearch = inject('_wwSelectUpdateSearch', () => {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
-        const { updateHasSearch, updateSearchElement } = inject('_wwSelectUseSearch', {});
+        const { updateHasSearch, updateSearchElement, updateSearch } = inject('_wwSelectUseSearch', {});
+        const { debounce } = inject('_wwUtils', {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
         const searchBy = computed(() => {
@@ -41,6 +32,16 @@ export default {
                 .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
                 .flat();
         });
+
+        const debouncedUpdateSearch = debounce((value, searchBy) => {
+            if (updateSearch) updateSearch({ value, searchBy });
+        }, 300);
+
+        const handleInputChange = event => {
+            if (event.type === 'change') {
+                debouncedUpdateSearch(event.value, searchBy);
+            }
+        };
 
         watch(searchElement, value => {
             if (updateSearchElement) updateSearchElement(value);
@@ -57,17 +58,10 @@ export default {
             { immediate: true, deep: true }
         );
 
-        const debouncedUpdateSearch = debounce((value, searchBy) => {
-            if (updateSearch) updateSearch({ value, searchBy });
-        }, 300);
-
-        const handleInputChange = event => {
-            if (event.type === 'change') {
-                debouncedUpdateSearch(event.value, searchBy);
-            }
-        };
-
-        if (updateHasSearch) updateHasSearch(true);
+        onMounted(() => {
+            if (updateHasSearch) updateHasSearch(true);
+            if (updateSearch) updateSearch({ value: '', searchBy });
+        });
         onBeforeUnmount(() => {
             if (updateHasSearch) updateHasSearch(false);
         });
