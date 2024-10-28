@@ -20,7 +20,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['update:content'],
+    emits: ['update:sidepanel-content'],
     setup(props, { emit }) {
         const { debounce } = inject('_wwUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
@@ -47,10 +47,7 @@ export default {
         watch(
             optionProperties,
             value => {
-                emit('update:sidepanel-content', {
-                    path: 'optionProperties',
-                    value,
-                });
+                emit('update:sidepanel-content', { path: 'optionProperties', value });
             },
             { immediate: true, deep: true }
         );
