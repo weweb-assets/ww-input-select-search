@@ -24,7 +24,10 @@ export default {
     setup(props, { emit }) {
         const { debounce } = inject('_wwUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
-        const { updateHasSearch, updateSearchElement, updateSearch } = inject('_wwSelectUseSearch', {});
+        const { updateHasSearch, updateSearchElement, updateSearch, updateAutoFocusSearch } = inject(
+            '_wwSelectUseSearch',
+            {}
+        );
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
         const searchBy = computed(() => {
@@ -33,6 +36,7 @@ export default {
                 .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
                 .flat();
         });
+        const autoFocus = computed(() => props.content.autoFocus);
         const debouncedUpdateSearch = debounce((value, searchBy) => {
             if (updateSearch) updateSearch({ value, searchBy });
         }, 300);
@@ -51,6 +55,9 @@ export default {
             },
             { immediate: true, deep: true }
         );
+        watch(autoFocus, value => {
+            if (updateAutoFocusSearch) updateAutoFocusSearch(value);
+        });
         onMounted(() => {
             if (updateHasSearch) updateHasSearch(true);
             if (updateSearch) updateSearch({ value: '', searchBy, searchMatches: [] });

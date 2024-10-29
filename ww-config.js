@@ -32,6 +32,18 @@ export default {
                 };
             },
         },
+        autoFocus: {
+            label: 'Auto focus',
+            type: 'OnOff',
+            defaultValue: true,
+            bindable: true,
+            /* wwEditor:start */
+            bindingValidation: {
+                validations: [{ type: 'boolean' }],
+                tooltip: 'Auto focus the search input when the component is mounted.',
+            },
+            /* wwEditor:end */
+        },
         textInput: {
             hidden: true,
             defaultValue: {
