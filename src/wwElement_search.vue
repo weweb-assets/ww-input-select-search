@@ -1,6 +1,7 @@
 <template>
-    <div class="ww-select-search">
+    <div class="ww-select-search" @keydown="handleKeydown">
         <wwElement
+            class="ww-select-search"
             ref="searchElementRef"
             v-bind="content.textInput"
             :name="wwElementState.name"
@@ -28,6 +29,7 @@ export default {
             '_wwSelectUseSearch',
             {}
         );
+        const handleKeydown = inject('_wwHandleKeydown', () => {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
         const searchBy = computed(() => {
@@ -65,9 +67,11 @@ export default {
         onBeforeUnmount(() => {
             if (updateHasSearch) updateHasSearch(false);
         });
+
         return {
             searchElementRef,
             handleInputChange,
+            handleKeydown,
         };
     },
 };
