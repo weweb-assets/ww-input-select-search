@@ -1,11 +1,13 @@
 <template>
-    <div class="ww-select-search" @keydown="handleKeydown">
+    <div class="ww-select-search" @keydown="handleLocalKeydown">
         <wwElement
             class="ww-select-search"
             ref="searchElementRef"
             v-bind="content.textInput"
             :name="wwElementState.name"
             @element-event="handleInputChange"
+            @focus="handleFocus"
+            @blur="handleBlur"
         />
     </div>
 </template>
@@ -21,7 +23,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['update:sidepanel-content'],
+    emits: ['trigger-event', 'update:sidepanel-content'],
     setup(props, { emit }) {
         const { debounce } = inject('_wwUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
@@ -29,6 +31,7 @@ export default {
             '_wwSelectUseSearch',
             {}
         );
+        const searchState = inject('_wwSelectSearchState', ref({}));
         const handleKeydown = inject('_wwHandleKeydown', () => {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
@@ -38,6 +41,7 @@ export default {
                 .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
                 .flat();
         });
+        const searchValue = computed(() => searchState.value?.value);
         const autoFocus = computed(() => props.content.autoFocus);
         const debouncedUpdateSearch = debounce((value, searchBy) => {
             if (updateSearch) updateSearch({ value, searchBy });
@@ -47,9 +51,32 @@ export default {
                 if (debounce) debouncedUpdateSearch(event.value, searchBy);
             }
         };
+
+        function handleLocalKeydown(event) {
+            handleKeydown(event);
+            emit('trigger-event', { name: 'onKeydown', event: { value: event } });
+        }
+
+        function handleFocus() {
+            emit('trigger-event', { name: 'focus', event: null });
+        }
+
+        function focusInput() {
+            searchElement.value?.focus();
+        }
+
+        function handleBlur() {
+            emit('trigger-event', { name: 'blur', event: null });
+        }
+
+        watch(searchValue, value => {
+            emit('trigger-event', { name: 'change', event: { value } });
+        });
+
         watch(searchElement, value => {
             if (updateSearchElement) updateSearchElement(value);
         });
+
         watch(
             optionProperties,
             value => {
@@ -57,13 +84,16 @@ export default {
             },
             { immediate: true, deep: true }
         );
+
         watch(autoFocus, value => {
             if (updateAutoFocusSearch) updateAutoFocusSearch(value);
         });
+
         onMounted(() => {
             if (updateHasSearch) updateHasSearch(true);
             if (updateSearch) updateSearch({ value: '', searchBy, searchMatches: [] });
         });
+
         onBeforeUnmount(() => {
             if (updateHasSearch) updateHasSearch(false);
         });
@@ -71,7 +101,10 @@ export default {
         return {
             searchElementRef,
             handleInputChange,
-            handleKeydown,
+            handleLocalKeydown,
+            handleFocus,
+            handleBlur,
+            focusInput,
         };
     },
 };
