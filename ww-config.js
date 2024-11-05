@@ -74,6 +74,11 @@ export default {
                     },
                 };
             },
+            /* wwEditor:start */
+            propertyHelp: {
+                tooltip: 'Which properties of the choices are searchable.',
+            },
+            /* wwEditor:end */
         },
         autoFocus: {
             label: 'Auto focus',
@@ -83,7 +88,7 @@ export default {
             /* wwEditor:start */
             bindingValidation: {
                 validations: [{ type: 'boolean' }],
-                tooltip: 'Auto focus the search input when the component is mounted.',
+                tooltip: 'Whether the search input should be focused when the dropdown is opened.',
             },
             /* wwEditor:end */
         },
