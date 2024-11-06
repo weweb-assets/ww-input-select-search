@@ -25,7 +25,7 @@ export default {
     },
     emits: ['trigger-event', 'update:sidepanel-content'],
     setup(props, { emit }) {
-        const { debounce } = inject('_wwUtils', {});
+        const { debounce } = inject('_wwSelectUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
         const { updateHasSearch, updateSearchElement, updateSearch, updateAutoFocusSearch } = inject(
             '_wwSelectUseSearch',
