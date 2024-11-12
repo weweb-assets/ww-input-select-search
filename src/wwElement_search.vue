@@ -1,10 +1,19 @@
 <template>
-    <div class="ww-select-search">
+    <div class="ww-select-search" data-ww-flag="ww-select-search">
         <wwElement
             ref="searchElementRef"
             v-bind="content.inputElement"
             :name="wwElementState.name"
             @element-event="handleInputChange"
+            :parent-selection="{
+                allow: true,
+                info: {
+                    header: 'You are on the input element',
+                    text: 'If you want to configure the Search element, you can select it here.',
+                    button: 'Search element',
+                    args: ['ww-select-search'],
+                },
+            }"
         />
     </div>
 </template>
