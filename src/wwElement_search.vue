@@ -1,15 +1,10 @@
 <template>
-    <div class="ww-select-search" @keydown="handleLocalKeydown">
-        <wwElement
-            class="ww-select-search"
-            ref="searchElementRef"
-            v-bind="content.textInput"
-            :name="wwElementState.name"
-            @element-event="handleInputChange"
-            @focus="handleFocus"
-            @blur="handleBlur"
-        />
-    </div>
+    <wwElement
+        ref="searchElementRef"
+        v-bind="content.inputElement"
+        :name="wwElementState.name"
+        @element-event="handleInputChange"
+    />
 </template>
 
 <script>
@@ -23,7 +18,7 @@ export default {
         /* wwEditor:end */
         wwElementState: { type: Object, required: true },
     },
-    emits: ['trigger-event', 'update:sidepanel-content'],
+    emits: ['element-event', 'trigger-event', 'update:sidepanel-content'],
     setup(props, { emit }) {
         const { debounce } = inject('_wwSelectUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
@@ -31,8 +26,6 @@ export default {
             '_wwSelectUseSearch',
             {}
         );
-        const searchState = inject('_wwSelectSearchState', ref({}));
-        const handleKeydown = inject('_wwHandleKeydown', () => {});
         const searchElementRef = ref(null);
         const searchElement = computed(() => searchElementRef.value?.componentRef?.$el);
         const searchBy = computed(() => {
@@ -41,37 +34,19 @@ export default {
                 .map(item => JSON.parse(item.filter.replace(/'/g, '"')))
                 .flat();
         });
-        const searchValue = computed(() => searchState.value?.value);
         const autoFocus = computed(() => props.content.autoFocus);
         const debouncedUpdateSearch = debounce((value, searchBy) => {
             if (updateSearch) updateSearch({ value, searchBy });
         }, 300);
+
+        // This event come from ww-input-basic => https://github.com/weweb-assets/ww-input-basic
         const handleInputChange = event => {
-            if (event.type === 'change') {
-                if (debounce) debouncedUpdateSearch(event.value, searchBy);
-            }
+            if (event.type === 'change' && debounce) debouncedUpdateSearch(event?.value?.value, searchBy);
         };
-
-        function handleLocalKeydown(event) {
-            handleKeydown(event);
-            emit('trigger-event', { name: 'onKeydown', event: { value: event } });
-        }
-
-        function handleFocus() {
-            emit('trigger-event', { name: 'focus', event: null });
-        }
 
         function focusInput() {
             searchElement.value?.focus();
         }
-
-        function handleBlur() {
-            emit('trigger-event', { name: 'blur', event: null });
-        }
-
-        watch(searchValue, value => {
-            emit('trigger-event', { name: 'change', event: { value } });
-        });
 
         watch(searchElement, value => {
             if (updateSearchElement) updateSearchElement(value);
@@ -101,9 +76,6 @@ export default {
         return {
             searchElementRef,
             handleInputChange,
-            handleLocalKeydown,
-            handleFocus,
-            handleBlur,
             focusInput,
         };
     },

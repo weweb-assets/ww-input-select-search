@@ -10,49 +10,7 @@ export default {
         autoByContent: true,
         displayAllowedValues: ['flex', 'grid', 'inline-flex', 'inline-grid'],
     },
-    actions: [{ label: 'Focus element', action: 'focusInput' }],
-    triggerEvents: [
-        { name: 'change', label: { en: 'On search change' }, event: { value: '' }, default: true },
-        {
-            name: 'onKeydown',
-            label: { en: 'On keydown' },
-            event: {
-                isTrusted: undefined,
-                _vts: undefined,
-                altKey: false,
-                bubbles: undefined,
-                cancelBubble: undefined,
-                cancelable: undefined,
-                charCode: 0,
-                code: '',
-                composed: undefined,
-                ctrlKey: false,
-                currentTarget: null,
-                defaultPrevented: undefined,
-                detail: 0,
-                eventPhase: 0,
-                isComposing: undefined,
-                key: '',
-                keyCode: undefined,
-                location: 0,
-                metaKey: false,
-                repeat: undefined,
-                returnValue: undefined,
-                shiftKey: false,
-                sourceCapabilities: {
-                    firesTouchEvents: undefined,
-                },
-                srcElement: null,
-                target: null,
-                timeStamp: undefined,
-                type: '',
-                view: null,
-                which: undefined,
-            },
-        },
-        { name: 'focus', label: { en: 'On focus' }, event: null },
-        { name: 'blur', label: { en: 'On blur' }, event: null },
-    ],
+    actions: [{ label: 'Focus input', action: 'focusInput' }],
     properties: {
         searchBy: {
             label: 'Search by',
@@ -92,11 +50,11 @@ export default {
             },
             /* wwEditor:end */
         },
-        textInput: {
+        inputElement: {
             hidden: true,
             defaultValue: {
                 isWwObject: true,
-                type: '9c263ffe-7da7-45e7-832c-543aef56faef',
+                type: 'deb10a01-5eef-4aa1-9017-1b51c2ad6fd0',
             },
         },
         optionProperties: {
