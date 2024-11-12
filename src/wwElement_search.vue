@@ -1,10 +1,12 @@
 <template>
-    <wwElement
-        ref="searchElementRef"
-        v-bind="content.inputElement"
-        :name="wwElementState.name"
-        @element-event="handleInputChange"
-    />
+    <div class="ww-select-search">
+        <wwElement
+            ref="searchElementRef"
+            v-bind="content.inputElement"
+            :name="wwElementState.name"
+            @element-event="handleInputChange"
+        />
+    </div>
 </template>
 
 <script>
