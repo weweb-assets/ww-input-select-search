@@ -10,7 +10,7 @@
                 info: {
                     header: 'You are on the input element',
                     text: 'If you want to configure the Search element, you can select it here.',
-                    button: 'Search element',
+                    button: 'Select Search element',
                     args: ['ww-select-search'],
                 },
             }"
@@ -20,6 +20,9 @@
 
 <script>
 import { inject, onMounted, onBeforeUnmount, ref, computed, watch } from 'vue';
+/* wwEditor:start */
+import useEditorHint from './editor/useEditorHint';
+/* wwEditor:end */
 
 export default {
     props: {
@@ -31,6 +34,10 @@ export default {
     },
     emits: ['element-event', 'trigger-event', 'update:sidepanel-content'],
     setup(props, { emit }) {
+        /* wwEditor:start */
+        useEditorHint(emit);
+        /* wwEditor:end */
+
         const { debounce } = inject('_wwSelectUtils', {});
         const optionProperties = inject('_wwSelectOptionProperties', ref({}));
         const { updateHasSearch, updateSearchElement, updateSearch, updateAutoFocusSearch } = inject(

@@ -2,6 +2,14 @@ export default {
     editor: {
         label: 'Select Search',
         icon: 'select',
+        hint: (_, sidepanelContent) => {
+            if (sidepanelContent.isInSelect === false) return null;
+            return {
+                section: 'style',
+                type: 'warning',
+                text: 'Select Search must be placed inside a Select element.',
+            };
+        },
     },
     inherit: {
         type: 'ww-layout',
@@ -60,6 +68,11 @@ export default {
         optionProperties: {
             hidden: true,
             editorOnly: true,
+        },
+        isInSelect: {
+            hidden: true,
+            editorOnly: true,
+            defaultValue: false,
         },
     },
 };
