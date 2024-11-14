@@ -3,7 +3,7 @@ export default {
         label: 'Select Search',
         icon: 'select',
         hint: (_, sidepanelContent) => {
-            if (sidepanelContent.isInSelect === false) return null;
+            if (sidepanelContent.isInSelect) return null;
             return {
                 section: 'style',
                 type: 'warning',
