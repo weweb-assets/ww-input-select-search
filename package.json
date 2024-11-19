@@ -4,9 +4,6 @@
         "type": "git",
         "url": "https://github.com/weweb-assets/ww-select-search"
     },
-    "weweb": {
-        "componentPath": "./src/wwElement_Search.vue"
-    },
     "version": "1.0.0",
     "scripts": {
         "build": "weweb build",
