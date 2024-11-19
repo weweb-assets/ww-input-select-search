@@ -56,7 +56,8 @@ export default {
         });
         const autoFocus = computed(() => props.content.autoFocus);
         const debouncedUpdateSearch = debounce((value, searchBy) => {
-            if (updateSearch) updateSearch({ value, searchBy });
+            console.log('debouncedUpdateSearch', value, searchBy);
+            // if (updateSearch) updateSearch({ value, searchBy });
         }, 300);
 
         // This event come from ww-input-basic => https://github.com/weweb-assets/ww-input-basic
