@@ -38,10 +38,10 @@ export default {
         useEditorHint(emit);
         /* wwEditor:end */
 
-        const { debounce } = inject('_wwSelectUtils', {});
-        const optionProperties = inject('_wwSelectOptionProperties', ref({}));
+        const { debounce } = inject('_wwSelect:utils', {});
+        const optionProperties = inject('_wwSelect:optionProperties', ref({}));
         const { updateHasSearch, updateSearchElement, updateSearch, updateAutoFocusSearch } = inject(
-            '_wwSelectUseSearch',
+            '_wwSelect:useSearch',
             {}
         );
         const searchElementRef = ref(null);
