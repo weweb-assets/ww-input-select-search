@@ -23,6 +23,7 @@ import { inject, onMounted, onBeforeUnmount, ref, computed, watch } from 'vue';
 /* wwEditor:start */
 import useEditorHint from './editor/useEditorHint';
 /* wwEditor:end */
+import { debounce } from './utils';
 
 export default {
     props: {
@@ -38,9 +39,6 @@ export default {
         useEditorHint(emit);
         /* wwEditor:end */
 
-        const { debounce } = inject('_wwSelect:utils', {
-            debounce: () => {},
-        });
         const optionProperties = inject('_wwSelect:optionProperties', ref({}));
         const { updateHasSearch, updateSearchElement, updateSearch, updateAutoFocusSearch } = inject(
             '_wwSelect:useSearch',
