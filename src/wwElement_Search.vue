@@ -3,7 +3,7 @@
         <wwElement
             ref="searchElementRef"
             v-bind="content.inputElement"
-            :name="wwElementState.name"
+            :name="wwElementState.name || 'search-' + uid"
             @element-event="handleInputChange"
             data-skip-validation
             :parent-selection="{
@@ -28,6 +28,7 @@ import { debounce } from './utils';
 
 export default {
     props: {
+        uid: { type: String, required: true },
         content: { type: Object, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
