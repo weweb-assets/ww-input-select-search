@@ -5,6 +5,7 @@
             v-bind="content.inputElement"
             :name="wwElementState.name"
             @element-event="handleInputChange"
+            data-skip-validation
             :parent-selection="{
                 allow: true,
                 info: {
