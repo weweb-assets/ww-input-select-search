@@ -3,7 +3,7 @@
         <wwElement
             ref="searchElementRef"
             v-bind="content.inputElement"
-            :name="wwElementState.name || 'search-' + uid"
+            :name="wwElementState.name || 'select-search-' + uid"
             @element-event="handleInputChange"
             data-skip-validation
             :parent-selection="{
