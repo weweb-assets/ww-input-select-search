@@ -62,7 +62,7 @@ export default {
             hidden: true,
             defaultValue: {
                 isWwObject: true,
-                type: 'deb10a01-5eef-4aa1-9017-1b51c2ad6fd0',
+                type: 'd8daaa11-abeb-441b-b6c5-35bba9594d11',
             },
         },
         optionProperties: {
